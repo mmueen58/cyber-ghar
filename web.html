@@ -423,30 +423,42 @@
         formData.append('notes', document.getElementById('notes').value);
 
         const fileInput = document.getElementById('documents');
-        if (fileInput.files.length > 0) {
+        if (fileInput && fileInput.files.length > 0) {
             formData.append('documents', fileInput.files[0]);
         }
 
         try {
             const response = await fetch('/api/create-order', {
                 method: 'POST',
-                body: formData // Sent as multipart form data including files
+                body: formData
             });
             
             const result = await response.json();
             if (result.success) {
-                alert(`Order Initialized! ID: ${result.orderId}\nRedirecting to WhatsApp...`);
+                alert(`Order Initialized! ID: ${result.orderId}\nRedirecting you to WhatsApp...`);
                 
-                const businessWhatsAppNumber = "919876543210"; 
+                const businessWhatsAppNumber = "919876543210"; // Replace with your actual number
+                const serviceName = document.getElementById('service-select').value;
+                const fullNameVal = document.getElementById('fullname').value;
+                const notesVal = document.getElementById('notes').value;
+
                 const whatsappMessage = encodeURIComponent(
-                    `Hello Cyber Ghar! 👋\nI placed order ID: ${result.orderId} for ${document.getElementById('service-select').value}.`
+                    `Hello Cyber Ghar! 👋\n\n` +
+                    `I have placed a new order.\n` +
+                    `🆔 Order ID: ${result.orderId}\n` +
+                    `👤 Name: ${fullNameVal}\n` +
+                    `🛠️ Service: ${serviceName}\n` +
+                    `📝 Notes: ${notesVal}\n\n` +
+                    `Please find my documents enclosed.`
                 );
 
                 window.location.href = `https://wa.me/${businessWhatsAppNumber}?text=${whatsappMessage}`;
+            } else {
+                alert('Server error: ' + result.message);
             }
         } catch (error) {
             console.error('Error submitting order:', error);
-            alert('Something went wrong. Please try again.');
+            alert('Something went wrong connecting to the server. Please try again.');
         }
     });
 </script>
