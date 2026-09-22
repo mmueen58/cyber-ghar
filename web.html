@@ -3,36 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Cyber Café - Online Services & Document Assistance</title>
-    <!-- Add this CSS inside your <style> section in web.html -->
-<style>
-    .modal-overlay {
-        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;
-    }
-    .modal-content {
-        background: white; padding: 2rem; border-radius: 10px; width: 90%; max-width: 450px; text-align: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .qr-box { margin: 15px 0; }
-    .qr-box img { width: 180px; height: 180px; border: 4px solid #f0f0f0; border-radius: 8px; }
-    .pay-options { text-align: left; background: #f9f9f9; padding: 10px; border-radius: 6px; margin: 15px 0; font-size: 0.9rem; }
-    .whatsapp-btn {
-        background: #25d366; color: white; border: none; padding: 12px 20px; font-size: 1rem;
-        font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;
-    }
-    .whatsapp-btn:hover { background: #1ebe5d; }
-</style>
+    <title>Cyber Ghar - Home Cyber Café</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-<!-- Add this HTML modal structure right before closing </body> -->
+body {
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #00251a;
+    color: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header nav a {
+    color: #b2dfdb;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 600;
+}
+
+header nav a:hover {
+    color: white;
+}
+
+.hero {
+    background: linear-gradient(135deg, #004d40, #00796b);
+    color: white;
+    padding: 4rem 5%;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: #e0f2f1;
+}
+
+.btn {
+    background-color: #ffb300;
+    color: #333;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #ffa000;
+}
+
+.container {
+    max-width: 600px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+h2 {
+    color: #004d40;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom:.5rem;
+    font-weight: 600;
+    color: #004d40;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #004d40;
+    outline: none;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: #001a13;
+    color: #aaa;
+    margin-top: 3rem;
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-size: 1.5rem; font-weight: bold;">💻 Cyber Ghar</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="#services">Services & Pricing</a>
+            <a href="#how">How It Works</a>
+            <a href="#book">Book Service</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Your Neighborhood Cyber Café, Now Online</h1>
+        <p>Get form filling, government job applications, document printing, and resume creation instantly.</p>
+        <a href="#book" class="btn">Book a Service Now</a>
+    </section>
+
+    <div class="container" id="book">
+        <h2>Book a Service</h2>
+        <form>
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" required placeholder="Enter your mobile number">
+            </div>
+
+            <div class="form-group">
+                <label for="service-select">Select Service</label>
+                <select id="service-select" required>
+                    <option value="" disabled selected>Select a service</option>
+                    <option value="Job Form Filling">Job Form Filling</option>
+                    <option value="PAN Card Application">PAN Card Application</option>
+                    <option value="Aadhaar Update">Aadhaar Update</option>
+                    <option value="Color Printout">Color Printout</option>
+                    <option value="Passport Seva">Passport Seva</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notes / Details</label>
+                <textarea id="notes" rows="4" placeholder="Mention any specific details or instructions..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="documents">Upload Documents (PDF/Image)</label>
+                <input type="file" id="documents">
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; text-align: center; border: none; cursor: pointer;">Proceed to Payment & Submit</button>
+        </form>
+    </div>
+
+    <!-- Payment Modal -->
+    <!-- Payment Modal -->
 <div id="paymentModal" class="modal-overlay">
     <div class="modal-content">
         <h2 style="color: #004d40; margin-bottom: 5px;">Scan & Pay</h2>
-        <p style="color: #666; font-size: 0.9rem;">Order ID: <span id="modal-order-id" style="font-weight:bold; color:#333;"></span></p>
+        <p style="color: #666; font-size: 0.9rem;">Order ID: <span id="modal-order-id" style="font-weight:bold; color:#333;">[Generating...]</span></p>
         
-        <!-- Dynamic QR Code Container -->
         <div class="qr-box">
-            <img id="upi-qr-image" src="" alt="UPI QR Code">
+            <!-- Added a fallback display or direct QR generator link -->
+            <img id="upi-qr-image" src="" alt="UPI QR Code Loading..." style="min-height: 180px; background: #eee;">
         </div>
 
         <div class="pay-options">
@@ -47,7 +205,6 @@
     </div>
 </div>
 
-<!-- Replace your form submission script with this robust version -->
 <script>
     let savedOrderDetails = {};
 
@@ -77,247 +234,49 @@
             });
             
             const result = await response.json();
-            if (result.success) {
-                // Save details globally for the modal button
-                savedOrderDetails = { orderId: result.orderId, fullname, service, notes };
+            
+            // Check what the server actually returned
+            if (response.ok && result.orderId) {
+                savedOrderDetails = { 
+                    orderId: result.orderId, 
+                    fullname: fullname, 
+                    service: service, 
+                    notes: notes 
+                };
 
-                // Generate dynamic UPI QR Code (Replace 'cyberghar@paytm' with your actual UPI ID)
                 const upiId = "cyberghar@paytm";
-                const amount = "50.00"; // You can customize default service charge or pass dynamically
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${upiId}&pn=Cyber%20Ghar&am=${amount}&cu=INR`;
+                const amount = "50.00";
+                // Using a reliable public QR generator API URL encoded safely
+                const paymentUri = encodeURIComponent(`upi://pay?pa=${upiId}&pn=Cyber%20Ghar&am=${amount}&cu=INR`);
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${paymentUri}`;
                 
                 document.getElementById('upi-qr-image').src = qrUrl;
                 document.getElementById('modal-order-id').innerText = result.orderId;
-
-                // Open the Payment Modal
+                
+                // Force display modal
                 document.getElementById('paymentModal').style.display = 'flex';
             } else {
-                alert('Error: ' + result.message);
+                alert('Server Error: ' + (result.message || 'Could not generate order ID.'));
             }
         } catch (error) {
             console.error('Submission error:', error);
-            alert('Something went wrong. Please check your server connection.');
+            alert('Something went wrong connecting to the server. Check your console logs.');
         }
     });
 
     function proceedToWhatsApp() {
-        const businessWhatsAppNumber = "919876543210"; // Replace with your WhatsApp number
+        const businessWhatsAppNumber = "919876543210"; // Replace with your actual WhatsApp number
         const msg = encodeURIComponent(
             `Hello Cyber Ghar! 👋\n\n` +
             `I have made my order payment.\n` +
-            `🆔 Order ID: ${savedOrderDetails.orderId}\n` +
-            `👤 Name: ${savedOrderDetails.fullname}\n` +
-            `🛠️ Service: ${savedOrderDetails.service}\n\n` +
+            `🆔 Order ID: ${savedOrderDetails.orderId || 'N/A'}\n` +
+            `👤 Name: ${savedOrderDetails.fullname || 'Customer'}\n` +
+            `🛠️ Service: ${savedOrderDetails.service || 'Service'}\n\n` +
             `[Attached is my payment screenshot and documents]`
         );
 
         window.location.href = `https://wa.me/${businessWhatsAppNumber}?text=${msg}`;
     }
-</script>
-</head>
-<body>
-
-    <!-- Navigation Bar -->
-    <header>
-        <div class="logo">💻 Cyber Ghar</div>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#services">Services & Pricing</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#book">Book Service</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Hero Banner -->
-    <section class="hero">
-        <h1>Your Neighborhood Cyber Café, Now Online!</h1>
-        <p>Get form filling, government job applications, document printing, and resume creation done instantly from home.</p>
-        <a href="#book" class="cta-btn">Book a Service Now</a>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works">
-        <h2>How It Works</h2>
-        <div class="steps-container">
-            <div class="step-box">
-                <div class="step-number">1</div>
-                <h3>Select Service</h3>
-                <p>Choose the form or document service you need from our catalog.</p>
-            </div>
-            <div class="step-box">
-                <div class="step-number">2</div>
-                <h3>Upload Documents</h3>
-                <p>Securely upload your files or details required for processing.</p>
-            </div>
-            <div class="step-box">
-                <div class="step-number">3</div>
-                <h3>Quick Payment</h3>
-                <p>Pay nominal service charges securely online via UPI or card.</p>
-            </div>
-            <div class="step-box">
-                <div class="step-number">4</div>
-                <h3>Get Results</h3>
-                <p>Receive your completed files, printouts, or confirmation via WhatsApp/Email.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services & Pricing Section -->
-    <section id="services">
-        <h2>Our Services & Transparent Pricing</h2>
-        <div class="service-grid">
-            <div class="service-card">
-                <div>
-                    <h3>📝 Job Form Filling</h3>
-                    <p>Accurate filling of government & private job recruitment forms.</p>
-                </div>
-                <div class="price">₹100 / form</div>
-            </div>
-            <div class="service-card">
-                <div>
-                    <h3>🪪 PAN / Aadhaar Assistance</h3>
-                    <p>Assistance with printouts, linking, updates, and corrections.</p>
-                </div>
-                <div class="price">₹50 onwards</div>
-            </div>
-            <div class="service-card">
-                <div>
-                    <h3>📄 Resume / CV Creation</h3>
-                    <p>Professional ATS-friendly resume built to get you hired faster.</p>
-                </div>
-                <div class="price">₹100</div>
-            </div>
-            <div class="service-card">
-                <div>
-                    <h3>🖨️ Print, Scan & PDF</h3>
-                    <p>Document conversion, merging, scanning, and high-quality prints.</p>
-                </div>
-                <div class="price">₹50 onwards</div>
-            </div>
-            <div class="service-card">
-                <div>
-                    <h3>📸 Photo Resizing & BG Removal</h3>
-                    <p>Resize images for exam portals with background removal.</p>
-                </div>
-                <div class="price">₹50</div>
-            </div>
-            <div class="service-card">
-                <div>
-                    <h3>🚆 Ticket & Bill Bookings</h3>
-                    <p>Train, bus ticket booking assistance and utility bill payments.</p>
-                </div>
-                <div class="price">₹50 service fee</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Customer Booking & Upload Form -->
-    <section id="book">
-        <h2>Book a Service & Upload Documents</h2>
-        <div class="booking-section">
-            <form action="#" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="fullname">Full Name</label>
-                    <input type="text" id="fullname" placeholder="Enter your full name" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">WhatsApp Mobile Number</label>
-                    <input type="tel" id="phone" placeholder="10-digit mobile number" required>
-                </div>
-                <div class="form-group">
-                    <label for="service-select">Select Service</label>
-                    <select id="service-select" required>
-                        <option value="">-- Choose a Service --</option>
-                        <option value="job">Job Form Filling (₹100)</option>
-                        <option value="pan-aadhaar">PAN/Aadhaar Assistance (₹50)</option>
-                        <option value="resume">Resume / CV Creation (₹100)</option>
-                        <option value="print">Print / Scan / PDF (₹50)</option>
-                        <option value="photo">Photo Resizing (₹50)</option>
-                        <option value="ticket">Ticket / Bill Booking (₹50)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Instructions / Details needed</label>
-                    <textarea id="notes" rows="4" placeholder="Provide details like website login, application numbers, or specific instructions..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="documents">Upload Documents (PDF, Images, etc.)</label>
-                    <input type="file" id="documents" multiple>
-                </div>
-                <button type="submit" class="submit-btn">Proceed to Payment & Submit Order</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section id="about">
-        <h2>About Cyber Ghar</h2>
-        <div class="about-content">
-            <p><strong>Cyber Ghar</strong> bridges the gap between traditional local cyber café services and digital convenience. No more standing in long lines for form submissions, printouts, or document updates. Send your requirements securely online, and let our verified professionals handle your paperwork accurately and quickly from home!</p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Cyber Ghar (Home Cyber Café). All rights reserved.</p>
-    </footer>
-
-    <!-- Floating WhatsApp Support -->
-    <a href="https://wa.me/917906186854" target="_blank" class="whatsapp-float">
-        💬 Chat on WhatsApp
-    </a>
-<script>
-    document.querySelector('form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData();
-        formData.append('fullname', document.getElementById('fullname').value);
-        formData.append('phone', document.getElementById('phone').value);
-        formData.append('service', document.getElementById('service-select').value);
-        formData.append('notes', document.getElementById('notes').value);
-
-        const fileInput = document.getElementById('documents');
-        if (fileInput && fileInput.files.length > 0) {
-            formData.append('documents', fileInput.files[0]);
-        }
-
-        try {
-            const response = await fetch('/api/create-order', {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
-            if (result.success) {
-                alert(`Order Initialized! ID: ${result.orderId}\nRedirecting you to WhatsApp...`);
-                
-                const businessWhatsAppNumber = "919876543210"; // Replace with your actual number
-                const serviceName = document.getElementById('service-select').value;
-                const fullNameVal = document.getElementById('fullname').value;
-                const notesVal = document.getElementById('notes').value;
-
-                const whatsappMessage = encodeURIComponent(
-                    `Hello Cyber Ghar! 👋\n\n` +
-                    `I have placed a new order.\n` +
-                    `🆔 Order ID: ${result.orderId}\n` +
-                    `👤 Name: ${fullNameVal}\n` +
-                    `🛠️ Service: ${serviceName}\n` +
-                    `📝 Notes: ${notesVal}\n\n` +
-                    `Please find my documents enclosed.`
-                );
-
-                window.location.href = `https://wa.me/${businessWhatsAppNumber}?text=${whatsappMessage}`;
-            } else {
-                alert('Server error: ' + result.message);
-            }
-        } catch (error) {
-            console.error('Error submitting order:', error);
-            alert('Something went wrong connecting to the server. Please try again.');
-        }
-    });
 </script>
 </body>
 </html>
