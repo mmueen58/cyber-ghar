@@ -4,259 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Cyber Café - Online Services & Document Assistance</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    <!-- Add this CSS inside your <style> section in web.html -->
+<style>
+    .modal-overlay {
+        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;
+    }
+    .modal-content {
+        background: white; padding: 2rem; border-radius: 10px; width: 90%; max-width: 450px; text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .qr-box { margin: 15px 0; }
+    .qr-box img { width: 180px; height: 180px; border: 4px solid #f0f0f0; border-radius: 8px; }
+    .pay-options { text-align: left; background: #f9f9f9; padding: 10px; border-radius: 6px; margin: 15px 0; font-size: 0.9rem; }
+    .whatsapp-btn {
+        background: #25d366; color: white; border: none; padding: 12px 20px; font-size: 1rem;
+        font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;
+    }
+    .whatsapp-btn:hover { background: #1ebe5d; }
+</style>
+
+<!-- Add this HTML modal structure right before closing </body> -->
+<div id="paymentModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 style="color: #004d40; margin-bottom: 5px;">Scan & Pay</h2>
+        <p style="color: #666; font-size: 0.9rem;">Order ID: <span id="modal-order-id" style="font-weight:bold; color:#333;"></span></p>
+        
+        <!-- Dynamic QR Code Container -->
+        <div class="qr-box">
+            <img id="upi-qr-image" src="" alt="UPI QR Code">
+        </div>
+
+        <div class="pay-options">
+            <p><b>📱 UPI Apps:</b> Google Pay, PhonePe, Paytm</p>
+            <p><b>💳 Credit/Debit Card:</b> Accepted via WhatsApp link coordinate</p>
+            <p><b>🆔 UPI ID:</b> <span style="color: #00796b; font-weight: bold;">cyberghar@paytm</span></p>
+        </div>
+
+        <p style="font-size: 0.85rem; color: #555; margin-bottom: 10px;">After making the payment, click below to send your payment screenshot & documents to WhatsApp.</p>
+        
+        <button class="whatsapp-btn" onclick="proceedToWhatsApp()">💬 Send Payment & Files on WhatsApp</button>
+    </div>
+</div>
+
+<!-- Replace your form submission script with this robust version -->
+<script>
+    let savedOrderDetails = {};
+
+    document.querySelector('form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const fullname = document.getElementById('fullname').value;
+        const phone = document.getElementById('phone').value;
+        const service = document.getElementById('service-select').value;
+        const notes = document.getElementById('notes').value;
+
+        const formData = new FormData();
+        formData.append('fullname', fullname);
+        formData.append('phone', phone);
+        formData.append('service', service);
+        formData.append('notes', notes);
+
+        const fileInput = document.getElementById('documents');
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append('documents', fileInput.files[0]);
         }
 
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-            scroll-behavior: smooth;
-        }
+        try {
+            const response = await fetch('/api/create-order', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                // Save details globally for the modal button
+                savedOrderDetails = { orderId: result.orderId, fullname, service, notes };
 
-        /* Navigation Bar */
-        header {
-            background-color: #004d40;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+                // Generate dynamic UPI QR Code (Replace 'cyberghar@paytm' with your actual UPI ID)
+                const upiId = "cyberghar@paytm";
+                const amount = "50.00"; // You can customize default service charge or pass dynamically
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${upiId}&pn=Cyber%20Ghar&am=${amount}&cu=INR`;
+                
+                document.getElementById('upi-qr-image').src = qrUrl;
+                document.getElementById('modal-order-id').innerText = result.orderId;
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 1px;
+                // Open the Payment Modal
+                document.getElementById('paymentModal').style.display = 'flex';
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            alert('Something went wrong. Please check your server connection.');
         }
+    });
 
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
+    function proceedToWhatsApp() {
+        const businessWhatsAppNumber = "919876543210"; // Replace with your WhatsApp number
+        const msg = encodeURIComponent(
+            `Hello Cyber Ghar! 👋\n\n` +
+            `I have made my order payment.\n` +
+            `🆔 Order ID: ${savedOrderDetails.orderId}\n` +
+            `👤 Name: ${savedOrderDetails.fullname}\n` +
+            `🛠️ Service: ${savedOrderDetails.service}\n\n` +
+            `[Attached is my payment screenshot and documents]`
+        );
 
-        nav ul li {
-            margin-left: 20px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #80cbc4;
-        }
-
-        /* Hero Banner */
-        .hero {
-            background: linear-gradient(rgba(0, 77, 64, 0.85), rgba(0, 77, 64, 0.85)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
-            color: white;
-            text-align: center;
-            padding: 5rem 2rem;
-        }
-
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
-            color: #e0f2f1;
-        }
-
-        .cta-btn {
-            background-color: #ffb300;
-            color: #333;
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-
-        .cta-btn:hover {
-            background-color: #ffa000;
-        }
-
-        /* Sections General */
-        section {
-            padding: 4rem 2rem;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        section h2 {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 2.5rem;
-            color: #004d40;
-        }
-
-        /* Services & Pricing Grid */
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .service-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .service-card h3 {
-            margin-bottom: 10px;
-            color: #00796b;
-        }
-
-        .price {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #d32f2f;
-            margin-top: 1rem;
-        }
-
-        /* How It Works Steps */
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-
-        .step-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .step-number {
-            background: #004d40;
-            color: white;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            margin: 0 auto 1rem auto;
-            font-weight: bold;
-        }
-
-        /* Booking Form */
-        .booking-section {
-            background: white;
-            padding: 3rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .submit-btn {
-            background-color: #004d40;
-            color: white;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
-        }
-
-        .submit-btn:hover {
-            background-color: #00332c;
-        }
-
-        /* About Us */
-        .about-content {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 8px;
-            line-height: 1.6;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        /* Floating WhatsApp Button */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background-color: #25d366;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 100;
-            transition: transform 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-        }
-
-        footer {
-            background: #00251a;
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 3rem;
-        }
-    </style>
+        window.location.href = `https://wa.me/${businessWhatsAppNumber}?text=${msg}`;
+    }
+</script>
 </head>
 <body>
 
